@@ -1,0 +1,7 @@
+[http]
+addr = "0.0.0.0:8080"
+shutdownTimeoutMs = 10000
+
+[mirror.github]
+owner = "HyeockJinKim"
+token = "FILL_ME"
