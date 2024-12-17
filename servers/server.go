@@ -13,6 +13,7 @@ type MirrorHandler interface {
 
 type ServerArgs struct {
 	Addr    string
+	APIKey  string
 	Handler MirrorHandler
 }
 
@@ -26,6 +27,7 @@ func NewServer(args ServerArgs) *Server {
 	e.Use(middleware.CORS())
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(APIKeyMiddleware(args.APIKey))
 	e.POST("/mirror/:destination", args.Handler.Mirror)
 	return &Server{
 		addr: args.Addr,

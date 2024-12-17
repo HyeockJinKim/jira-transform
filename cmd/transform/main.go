@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -20,7 +21,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
+	fmt.Printf("config: %+v\n", conf)
 	server := startServer(ctx, conf)
 	// signal handling
 	sig := make(chan os.Signal, 1)
@@ -39,15 +40,15 @@ func startServer(ctx context.Context, conf *config.Config) *servers.Server {
 		github = "github"
 	)
 	server := servers.NewServer(servers.ServerArgs{
-		Addr: conf.HTTP.Addr,
+		Addr:   conf.HTTP.Addr,
+		APIKey: "",
 		Handler: servers.NewHandler(servers.HandlerArgs{
 			Destinations: map[string]destination.Destination{
 				github: ghdst.NewDestination(ghdst.Args{
 					Token: conf.Mirror.Github.Token,
 					Owner: conf.Mirror.Github.Owner,
 				}),
-			},
-		}),
+			}}),
 	})
 	go func() {
 		if err := server.Start(ctx); err != nil {

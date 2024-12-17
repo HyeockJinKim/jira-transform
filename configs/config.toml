@@ -1,4 +1,5 @@
 [http]
+apiKey = "FILL_ME"
 addr = "0.0.0.0:8080"
 shutdownTimeoutMs = 10000
 

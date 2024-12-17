@@ -19,6 +19,7 @@ type Config struct {
 }
 
 type HTTP struct {
+	APIKey            string `toml:"apiKey"`
 	Addr              string `toml:"addr"`
 	ShutdownTimeoutMs int64  `toml:"shutdownTimeoutMs"`
 }
@@ -48,6 +49,9 @@ func ReadConfig() (*Config, error) {
 	}
 	if err := toml.Unmarshal(b, &cfg); err != nil {
 		return nil, err
+	}
+	if apiKey, prs := os.LookupEnv("API_KEY"); prs {
+		cfg.HTTP.APIKey = apiKey
 	}
 	return &cfg, nil
 }
