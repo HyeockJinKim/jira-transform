@@ -1,7 +1,9 @@
-package servers
+package convert
 
 import (
+	"bytes"
 	"fmt"
+	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
@@ -14,6 +16,28 @@ type jiration struct {
 
 // JiraToMD takes a string in Jira Markdown, and outputs Github Markdown
 func JiraToMD(str string) string {
+	return subprocessJIRATOMD(str)
+}
+
+func subprocessJIRATOMD(str string) string {
+	const pythonScriptFile = "convert.py"
+	cmd := exec.Command("python", pythonScriptFile, str)
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &out
+
+	err := cmd.Run()
+	if err != nil {
+		fmt.Println("Error executing Python script:", err)
+		panic(err)
+	}
+
+	return out.String()
+}
+
+func regexJIRATOMD(str string) string {
+	fmt.Printf("jira message: \n\n%s\n\n", str)
+
 	jirations := []jiration{
 		{ // UnOrdered Lists
 			re: regexp.MustCompile(`(?m)^[ \t]*(\*+)\s+`),
@@ -71,11 +95,11 @@ func JiraToMD(str string) string {
 		},
 		{ // Code Block
 			re:   regexp.MustCompile(`\{code(:([a-z]+))?([:|]?(title|borderStyle|borderColor|borderWidth|bgColor|titleBGColor)=.+?)*\}`),
-			repl: "```$2",
+			repl: "```$2\n",
 		},
 		{ // Code Block End
 			re:   regexp.MustCompile(`{code}`),
-			repl: "```",
+			repl: "\n```",
 		},
 		{ // Pre-formatted text
 			re:   regexp.MustCompile(`{noformat}`),

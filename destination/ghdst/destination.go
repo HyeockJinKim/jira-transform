@@ -28,9 +28,10 @@ func NewDestination(args Args) *Destination {
 
 func (d *Destination) Mirror(ctx context.Context, issue data.Issue) error {
 	_, _, err := d.cli.Issues.Create(ctx, d.owner, issue.Repo, &github.IssueRequest{
-		Title:  &issue.Title,
-		Body:   &issue.Description,
-		Labels: &issue.Labels,
+		Title: &issue.Title,
+		Body:  &issue.Description,
+		// empty lables
+		Labels: &[]string{},
 	})
 	if err != nil {
 		return fmt.Errorf("failed to create issue: %w", err)

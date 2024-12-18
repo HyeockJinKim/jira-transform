@@ -1,6 +1,9 @@
 package servers
 
-import "github.com/HyeockJinKim/jira-transform/data"
+import (
+	"github.com/HyeockJinKim/jira-transform/convert"
+	"github.com/HyeockJinKim/jira-transform/data"
+)
 
 type JIRAMirrorRequest struct {
 	Source      string   `param:"source"`
@@ -14,7 +17,7 @@ type JIRAMirrorRequest struct {
 func (m JIRAMirrorRequest) ToIssue() data.Issue {
 	return data.Issue{
 		Title:       m.Title,
-		Description: JiraToMD(m.Description),
+		Description: convert.JiraToMD(m.Description),
 		Labels:      m.Labels,
 		Repo:        m.Repo,
 	}
