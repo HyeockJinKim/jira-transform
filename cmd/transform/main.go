@@ -41,7 +41,7 @@ func startServer(ctx context.Context, conf *config.Config) *servers.Server {
 	)
 	server := servers.NewServer(servers.ServerArgs{
 		Addr:   conf.HTTP.Addr,
-		APIKey: "",
+		APIKey: conf.HTTP.APIKey,
 		Handler: servers.NewHandler(servers.HandlerArgs{
 			Destinations: map[string]destination.Destination{
 				github: ghdst.NewDestination(ghdst.Args{
