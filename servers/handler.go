@@ -34,5 +34,6 @@ func (h *Handler) Mirror(c echo.Context) error {
 	if err := dest.Mirror(c.Request().Context(), req.ToIssue()); err != nil {
 		return fmt.Errorf("failed to mirror: %w", err)
 	}
+	fmt.Printf("mirrored issue to %s\n", req.Repo)
 	return c.NoContent(http.StatusOK)
 }
