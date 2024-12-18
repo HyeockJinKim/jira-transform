@@ -21,7 +21,8 @@ type Destination struct {
 func NewDestination(args Args) *Destination {
 	cli := github.NewClient(nil).WithAuthToken(args.Token)
 	return &Destination{
-		cli: cli,
+		cli:   cli,
+		owner: args.Owner,
 	}
 }
 
